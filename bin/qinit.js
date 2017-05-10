@@ -11,6 +11,7 @@ cloneTemplate(quizName, function(err, stdout, stderr) {
     updateGitRemote(quizName, function(err, stdout, stderr) {
       if (err) throw err;
       console.log(stdout);
+      updatePackageJSON(quizName);
     })
 })
 
@@ -20,4 +21,12 @@ function cloneTemplate(quizName, callback) {
 
 function updateGitRemote(quizName, callback) {
   exec('cd ' + quizName + ' && git remote set-url origin git@github.com:tws-online-quiz/' + quizName +".git", callback);
+}
+
+function updatePackageJSON(quizName) {
+  let cmd = 'cd ' + quizName + ' && sed -i \'\' -e \'s/js-online-quiz-template/' + quizName + '/g\' -e \'s/tws-stack/tw-online-quiz/g\' package.json';
+  exec(cmd, function(err, stdout, stderr) {
+    if (err) throw err;
+    console.log(stdout);
+  });
 }
